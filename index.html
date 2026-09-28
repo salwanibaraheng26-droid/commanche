@@ -101,6 +101,12 @@
       gap: 16px;
     }
 
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
     .brand-group {
       display: flex;
       align-items: center;
@@ -218,7 +224,7 @@
       align-items: flex-start;
     }
 
-    /* Right-Aligned Sticky Sidebar Navigation with Smooth Slide Animation */
+    /* Left-Aligned Sticky Sidebar Navigation with Smooth Slide Animation */
     aside.sidebar {
       width: 320px;
       min-width: 320px;
@@ -229,7 +235,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       background-color: var(--bg-eggshell);
-      border-left: 1px solid var(--bg-eggshell-border);
+      border-right: 1px solid var(--bg-eggshell-border);
       padding: 24px 16px 40px;
       display: flex;
       flex-direction: column;
@@ -250,7 +256,7 @@
       min-width: 0;
       padding-left: 0;
       padding-right: 0;
-      border-left-color: transparent;
+      border-right-color: transparent;
       opacity: 0;
       pointer-events: none;
       overflow: hidden;
@@ -1288,15 +1294,15 @@
       aside.sidebar {
         position: fixed;
         top: 66px;
-        right: 0;
+        left: 0;
         height: calc(100vh - 66px);
         width: min(88vw, 340px);
         min-width: min(88vw, 340px);
         z-index: 60;
-        transform: translateX(100%);
+        transform: translateX(-100%);
         transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-        border-left: 1px solid var(--bg-eggshell-border);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+        border-right: 1px solid var(--bg-eggshell-border);
         display: flex;
         opacity: 1;
         padding: 24px 16px 40px;
@@ -1314,7 +1320,7 @@
       }
 
       aside.sidebar.collapsed {
-        transform: translateX(100%);
+        transform: translateX(-100%);
         width: min(88vw, 340px);
         min-width: min(88vw, 340px);
         padding: 24px 16px 40px;
@@ -1419,25 +1425,7 @@
   <!-- Top Sticky Header (Dark Red Primary Color) -->
   <header class="top-header">
     <div class="header-container">
-      <div class="brand-group">
-        <div class="brand-logo-wrap">
-          <img src="images/img_01.jpg" alt="Comanche Logo">
-        </div>
-        <div class="brand-titles">
-          <h1>Comanche</h1>
-          <p>คู่มือการใช้งานโปรแกรม (พื้นฐาน) Reservation Sand Sea Resort</p>
-        </div>
-      </div>
-      <div class="header-actions">
-
-        <a href="#" class="btn-home" title="กลับสู่หน้าแรก" aria-label="Home">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <span>หน้าแรก</span>
-        </a>
+      <div class="header-left">
         <button class="btn-mobile-nav" id="btnToggleNav" aria-label="Toggle Navigation" title="เปิด/ปิดเมนูสารบัญ">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
             stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;">
@@ -1447,13 +1435,96 @@
           </svg>
           <span>สารบัญ</span>
         </button>
+        <div class="brand-group">
+          <div class="brand-logo-wrap">
+            <img src="images/img_01.jpg" alt="Comanche Logo">
+          </div>
+          <div class="brand-titles">
+            <h1>Comanche</h1>
+            <p>คู่มือการใช้งานโปรแกรม (พื้นฐาน) Reservation Sand Sea Resort</p>
+          </div>
+        </div>
       </div>
+      <a href="#" class="btn-home" title="กลับสู่หน้าแรก" aria-label="Home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>หน้าแรก</span>
+      </a>
     </div>
   </header>
 
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
   <div class="layout-shell">
+
+    <!-- Left Side Navbar Sidebar -->
+    <aside class="sidebar" id="sidebarNav">
+      <div class="sidebar-heading">
+        <span>สารบัญคู่มือ (SITE MAP)</span>
+        <span class="badge-num">9 บท</span>
+      </div>
+
+      <ul class="nav-list" id="navList">
+        <li>
+          <a href="#chap1" class="nav-item">
+            <span class="chap-num">1</span>
+            <span>บทที่ 1: How to Log in (การเข้าสู่ระบบ Comanche)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap2" class="nav-item">
+            <span class="chap-num">2</span>
+            <span>บทที่ 2: How to Create a Reservation (การค้นหาและบันทึกข้อมูลการจอง)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap3" class="nav-item">
+            <span class="chap-num">3</span>
+            <span>บทที่ 3: How to Add Remarks (การเพิ่มหมายเหตุการจอง)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap4" class="nav-item">
+            <span class="chap-num">4</span>
+            <span>บทที่ 4: How to Set up Billing (การกำหนดข้อมูลการเรียกเก็บเงิน)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap5" class="nav-item">
+            <span class="chap-num">5</span>
+            <span>บทที่ 5: How to Attach Reservation Files (การแนบไฟล์เอกสารการจอง)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap6" class="nav-item">
+            <span class="chap-num">6</span>
+            <span>บทที่ 6: How to Create a New Booking (การสร้างรายการจองใหม่)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap7" class="nav-item">
+            <span class="chap-num">7</span>
+            <span>บทที่ 7: Room Type Guide (คู่มือประเภทห้องพัก)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap8" class="nav-item">
+            <span class="chap-num">8</span>
+            <span>บทที่ 8: Room Type & Adult/Child Guide (การเปลี่ยนประเภทห้องพักและจำนวนผู้เข้าพัก)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#chap9" class="nav-item">
+            <span class="chap-num">9</span>
+            <span>บทที่ 9: Child Policy & Additional Charges (นโยบายการเข้าพักสำหรับเด็ก)</span>
+          </a>
+        </li>
+      </ul>
+
+    </aside>
 
     <!-- Main Content Area (White Background) -->
     <main class="content-area">
@@ -2823,72 +2894,6 @@
 
     </main>
 
-    <!-- Right Side Navbar Sidebar -->
-    <aside class="sidebar" id="sidebarNav">
-      <div class="sidebar-heading">
-        <span>สารบัญคู่มือ (SITE MAP)</span>
-        <span class="badge-num">9 บท</span>
-      </div>
-
-      <ul class="nav-list" id="navList">
-        <li>
-          <a href="#chap1" class="nav-item">
-            <span class="chap-num">1</span>
-            <span>บทที่ 1: How to Log in (การเข้าสู่ระบบ Comanche)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap2" class="nav-item">
-            <span class="chap-num">2</span>
-            <span>บทที่ 2: How to Create a Reservation (การค้นหาและบันทึกข้อมูลการจอง)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap3" class="nav-item">
-            <span class="chap-num">3</span>
-            <span>บทที่ 3: How to Add Remarks (การเพิ่มหมายเหตุการจอง)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap4" class="nav-item">
-            <span class="chap-num">4</span>
-            <span>บทที่ 4: How to Set up Billing (การกำหนดข้อมูลการเรียกเก็บเงิน)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap5" class="nav-item">
-            <span class="chap-num">5</span>
-            <span>บทที่ 5: How to Attach Reservation Files (การแนบไฟล์เอกสารการจอง)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap6" class="nav-item">
-            <span class="chap-num">6</span>
-            <span>บทที่ 6: How to Create a New Booking (การสร้างรายการจองใหม่)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap7" class="nav-item">
-            <span class="chap-num">7</span>
-            <span>บทที่ 7: Room Type Guide (คู่มือประเภทห้องพัก)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap8" class="nav-item">
-            <span class="chap-num">8</span>
-            <span>บทที่ 8: Room Type & Adult/Child Guide (การเปลี่ยนประเภทห้องพักและจำนวนผู้เข้าพัก)</span>
-          </a>
-        </li>
-        <li>
-          <a href="#chap9" class="nav-item">
-            <span class="chap-num">9</span>
-            <span>บทที่ 9: Child Policy & Additional Charges (นโยบายการเข้าพักสำหรับเด็ก)</span>
-          </a>
-        </li>
-      </ul>
-
-    </aside>
-
   </div>
 
   <!-- Floating Back To Top Button -->
@@ -2968,45 +2973,82 @@
       btnToggleNav.addEventListener('click', toggleSidebar);
     }
 
-    // Close sidebar on link click (mobile)
+    // ==========================================
+    // 3. ScrollSpy & Sidebar Link Activation
+    // ==========================================
     var navLinks = document.querySelectorAll('.nav-list a');
+    var chapters = document.querySelectorAll('section.guide-chapter');
+    var isClickScrolling = false;
+    var clickTimeout = null;
+
+    function setActiveLink(targetId) {
+      navLinks.forEach(function (a) {
+        var href = a.getAttribute('href').replace('#', '');
+        if (href === targetId) {
+          a.classList.add('active');
+          if (sidebar && sidebar.scrollHeight > sidebar.clientHeight) {
+            var aRect = a.getBoundingClientRect();
+            var sRect = sidebar.getBoundingClientRect();
+            if (aRect.top < sRect.top || aRect.bottom > sRect.bottom) {
+              a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+          }
+        } else {
+          a.classList.remove('active');
+        }
+      });
+    }
+
+    function updateActiveNav() {
+      if (isClickScrolling) return;
+
+      var current = null;
+      var triggerPoint = Math.min(280, window.innerHeight * 0.45);
+
+      chapters.forEach(function (chap) {
+        var rect = chap.getBoundingClientRect();
+        if (rect.top <= triggerPoint) {
+          current = chap.getAttribute('id');
+        }
+      });
+
+      if (!current && chapters.length > 0) {
+        var firstRect = chapters[0].getBoundingClientRect();
+        if (firstRect.top > triggerPoint) {
+          current = chapters[0].getAttribute('id');
+        }
+      }
+
+      if ((window.innerHeight + window.pageYOffset) >= document.documentElement.scrollHeight - 60) {
+        if (chapters.length > 0) {
+          current = chapters[chapters.length - 1].getAttribute('id');
+        }
+      }
+
+      if (current) {
+        setActiveLink(current);
+      }
+    }
+
     navLinks.forEach(function (link) {
-      link.addEventListener('click', function () {
+      link.addEventListener('click', function (e) {
+        var targetId = this.getAttribute('href').replace('#', '');
+        
+        setActiveLink(targetId);
+
+        isClickScrolling = true;
+        if (clickTimeout) clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(function () {
+          isClickScrolling = false;
+          updateActiveNav();
+        }, 1000);
+
         if (window.innerWidth <= 860) {
           sidebar.classList.remove('open');
         }
       });
     });
 
-    // ==========================================
-    // 3. ScrollSpy (Active Section in Sidebar)
-    // ==========================================
-    var chapters = document.querySelectorAll('section.guide-chapter');
-    function updateActiveNav() {
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      var current = null;
-
-      chapters.forEach(function (chap) {
-        var top = chap.offsetTop - 120;
-        var height = chap.offsetHeight;
-        if (scrollY >= top && scrollY < top + height) {
-          current = chap.getAttribute('id');
-        }
-      });
-
-      if (!current && chapters.length > 0 && scrollY < chapters[0].offsetTop) {
-        current = chapters[0].getAttribute('id');
-      }
-
-      navLinks.forEach(function (a) {
-        var href = a.getAttribute('href').replace('#', '');
-        if (href === current) {
-          a.classList.add('active');
-        } else {
-          a.classList.remove('active');
-        }
-      });
-    }
     window.addEventListener('scroll', updateActiveNav);
     updateActiveNav();
 
