@@ -182,7 +182,9 @@
   }
 
   .btn-mobile-nav {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: #FFFFFF;
     color: var(--primary-red);
     border: none;
@@ -193,11 +195,14 @@
     font-family: inherit;
     cursor: pointer;
     box-shadow: var(--shadow-sm);
-    transition: all 0.2s;
+    transition: all 0.2s ease;
   }
 
   .btn-mobile-nav:hover {
     background: var(--accent-yellow-light);
+    color: var(--primary-red-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   }
 
   /* Main Layout Shell */
@@ -208,20 +213,42 @@
     align-items: flex-start;
   }
 
-  /* Right-Aligned Sidebar Navigation */
+  /* Right-Aligned Sticky Sidebar Navigation with Smooth Slide Animation */
   aside.sidebar {
     width: 320px;
+    min-width: 320px;
     flex-shrink: 0;
     position: sticky;
     top: 72px;
     height: calc(100vh - 72px);
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: var(--bg-eggshell);
     border-left: 1px solid var(--bg-eggshell-border);
     padding: 24px 16px 40px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                min-width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                padding 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.22s ease;
+  }
+
+  aside.sidebar > * {
+    min-width: 288px;
+  }
+
+  aside.sidebar.collapsed {
+    width: 0;
+    min-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-left-color: transparent;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
   }
 
   aside.sidebar::-webkit-scrollbar {
@@ -239,10 +266,11 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--primary-red);
-    padding: 0 8px;
+    padding: 0 4px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
   }
 
   .sidebar-heading span.badge-num {
@@ -890,6 +918,61 @@
     border-bottom: none;
   }
 
+  /* Child Policy Stack (Chapter 9) */
+  .child-policy-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin: 24px 0 36px;
+    max-width: 640px;
+  }
+
+  .child-policy-card {
+    background: #EBF1F6;
+    border: 1px solid #DFE7EF;
+    border-radius: 24px;
+    padding: 26px 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .child-policy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .child-policy-card .policy-age {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .child-policy-card .policy-headline {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    line-height: 1.45;
+  }
+
+  .child-policy-card .policy-desc {
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .child-policy-card .policy-list {
+    list-style-type: disc;
+    padding-left: 24px;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+  }
+
   /* Checklist for Chapter 8 */
   .checklist-wrap {
     background: var(--bg-eggshell);
@@ -1166,14 +1249,9 @@
   .btn-prev { left: 24px; }
   .btn-next { right: 24px; }
 
-  /* Mobile Drawer */
+  /* Backdrop disabled (No blur, clean side-by-side view) */
   .sidebar-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    z-index: 45;
+    display: none !important;
   }
 
   /* Responsive Rules */
@@ -1190,28 +1268,38 @@
   }
 
   @media (max-width: 860px) {
-    .btn-mobile-nav {
-      display: inline-flex;
-    }
     aside.sidebar {
       position: fixed;
-      top: 0;
+      top: 66px;
       right: 0;
-      left: auto;
-      height: 100vh;
-      width: min(84vw, 340px);
+      height: calc(100vh - 66px);
+      width: min(88vw, 340px);
+      min-width: min(88vw, 340px);
       z-index: 60;
       transform: translateX(100%);
-      transition: transform 0.28s ease;
-      box-shadow: -4px 0 24px rgba(0,0,0,0.25);
-      padding-top: 24px;
+      transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.15);
       border-left: 1px solid var(--bg-eggshell-border);
+      display: flex;
+      opacity: 1;
+      padding: 24px 16px 40px;
+      pointer-events: none;
+    }
+    aside.sidebar > * {
+      min-width: 0;
+      width: 100%;
     }
     aside.sidebar.open {
       transform: translateX(0);
+      pointer-events: auto;
     }
-    .sidebar-backdrop.active {
-      display: block;
+    aside.sidebar.collapsed {
+      transform: translateX(100%);
+      width: min(88vw, 340px);
+      min-width: min(88vw, 340px);
+      padding: 24px 16px 40px;
+      opacity: 1;
+      pointer-events: none;
     }
     .room-cards-grid {
       grid-template-columns: 1fr;
@@ -1291,12 +1379,12 @@
         <img src="images/img_01.jpg" alt="Comanche Logo">
       </div>
       <div class="brand-titles">
-        <h1>คู่มือการใช้โปรแกรม Comanche</h1>
-        <p>หลักสูตรพื้นฐานสำหรับนักศึกษาฝึกงานแผนก Reservation · Sand Sea Resort</p>
+        <h1>Comanche</h1>
+        <p>คู่มือการใช้งานโปรแกรม (พื้นฐาน) Reservation Sand Sea Resort</p>
       </div>
     </div>
     <div class="header-actions">
-      <span class="badge-resort">★ Sand Sea Resort</span>
+
       <a href="#" class="btn-home" title="กลับสู่หน้าแรก" aria-label="Home">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -1304,8 +1392,13 @@
         </svg>
         <span>หน้าแรก</span>
       </a>
-      <button class="btn-mobile-nav" id="btnToggleNav" aria-label="Toggle Navigation">
-        ☰ เมนูสารบัญ
+      <button class="btn-mobile-nav" id="btnToggleNav" aria-label="Toggle Navigation" title="เปิด/ปิดเมนูสารบัญ">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span>สารบัญ</span>
       </button>
     </div>
   </div>
@@ -1320,16 +1413,13 @@
 
     <!-- Hero Introduction Banner -->
     <div class="hero-welcome">
-      <span class="hero-badge-tag">
-        ✦ COMANCHE Front Office System · Version 8.2307
-      </span>
-      <h1>คู่มือการปฏิบัติงานโปรแกรม Comanche ฉบับสมบูรณ์</h1>
+      <h1>คู่มือการใช้งานโปรแกรม (พื้นฐาน)</h1>
       <p class="lead">
-        จัดทำขึ้นเพื่อการฝึกอบรมและเป็นคู่มืออ้างอิงขั้นตอนการทำงานแบบ Step-by-Step ของนักศึกษาฝึกงาน แผนก Reservation โรงแรม Sand Sea Resort ครอบคลุมตั้งแต่การเข้าสู่ระบบ การจัดการบุ๊กกิ้ง การตั้งค่า Folio การบันทึก Remark ไปจนถึงนโยบายประเภทห้องพักและเด็ก
+        จัดทำขึ้นเพื่ออธิบายขั้นตอนการทำงานแบบ Step-by-Step ของนักศึกษาฝึกงานแผนก Reservation โรงแรม Sand Sea Resort ครอบคลุมตั้งแต่การเข้าสู่ระบบ การจัดการบุ๊กกิ้ง การตั้งค่า Folio การบันทึก Remark ไปจนถึงนโยบายประเภทห้องพักและเด็ก
       </p>
       <div class="hero-meta-grid">
         <div class="hero-meta-item">
-          <span class="icon">📖</span> 8 บทเรียนมาตรฐาน
+          <span class="icon">📖</span> 9 บทเรียนมาตรฐาน
         </div>
         <div class="hero-meta-item">
           <span class="icon">🔍</span> คลิกที่รูปเพื่อซูมขนาดใหญ่ (Lightbox)
@@ -2150,38 +2240,15 @@
         <span class="chapter-badge">บทที่ 8</span>
         <div class="chapter-title-group">
           <h2>Room Type & Adult/Child Guide (การเปลี่ยนประเภทห้องพักและจำนวนผู้เข้าพัก)</h2>
-          <p class="sub">ขั้นตอนการแปลงสถานะเด็กอายุ 12 ปีขึ้นไปเป็นผู้ใหญ่ และการปรับเปลี่ยน Room Type / #Pax อาหารเช้า</p>
+          <p class="sub">การปรับเปลี่ยนประเภทห้องพัก (Room Type) และจำนวนผู้เข้าพัก (Adult/Child) ในระบบ Comanche</p>
         </div>
       </div>
 
       <div class="callout-box">
-        <div class="callout-icon">⚠️</div>
+        <div class="callout-icon">💡</div>
         <div class="callout-content">
-          <strong>กฎสำคัญที่ต้องจำ:</strong>
-          เมื่อมีเด็กอายุตั้งแต่ 12 ปีขึ้นไปใน Booking Confirmation ระบบโรงแรมจะนับเป็น <strong>ผู้ใหญ่ (Adult)</strong> ทันที จึงต้องเปลี่ยนประเภทห้องจากห้องพัก 2 คน (เช่น JSK) ให้เป็นห้องพัก 3 คน (เช่น JST) พร้อมทั้งเปลี่ยนจำนวน Adult และ #Pax ให้ตรงกัน
-        </div>
-      </div>
-
-      <!-- Comparison Case Study -->
-      <div class="step-card">
-        <div class="step-head">
-          <div class="step-num">🔍</div>
-          <div>
-            <div class="step-title">กรณีศึกษา: ตรวจสอบข้อมูล Booking Confirmation จาก OTA เปรียบเทียบกับ Comanche</div>
-            <div class="step-desc">
-              ตัวอย่างในใบจอง Hotels.com: <code>Number of adults: 1</code>, <code>Number of children aged 12: 1</code>, <code>Number of children aged 14: 1</code><br>
-              <strong>วิเคราะห์:</strong> เด็กทั้งสองคนอายุ 12 และ 14 ปี (อายุ 12 ปีขึ้นไปทั้งคู่) จึงต้องคิดเป็นผู้ใหญ่ 2 คน รวมกับผู้ใหญ่เดิม 1 คน กลายเป็น <strong>Adult รวม = 3 คน</strong> และ <strong>Child = 0 คน</strong>
-            </div>
-          </div>
-        </div>
-        <div class="figure-wrap">
-          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_01_ota_compare.png" data-caption="บทที่ 8 · เปรียบเทียบใบจอง OTA ที่มีเด็กอายุ 12, 14 ปี กับหน้าโปรแกรม Comanche">
-            <img src="images/ch8_01_ota_compare.png" alt="เปรียบเทียบ OTA กับ Comanche" loading="lazy">
-            <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
-          </div>
-          <div class="figure-caption">
-            <strong>รูปที่ 8.1:</strong> การเปรียบเทียบใบจอง OTA กับหน้า Comanche ที่ต้องปรับจำนวนผู้เข้าพัก
-          </div>
+          <strong>คำอธิบายการใช้งาน:</strong>
+          ใช้สำหรับปรับประเภทห้องพัก (Room Type) และจำนวนผู้เข้าพัก (Adult/Child) ให้ตรงกับ Booking Confirmation และเงื่อนไขการเข้าพักของโรงแรม ก่อนบันทึกข้อมูลลงระบบ Comanche
         </div>
       </div>
 
@@ -2190,95 +2257,103 @@
         <div class="step-head">
           <div class="step-num">1</div>
           <div>
-            <div class="step-title">ดับเบิลคลิกที่รายการจองในตารางด้านบน</div>
-            <div class="step-desc">ในหน้า Guest Booking แถวตารางรายการห้องพักด้านบน ให้ดับเบิลคลิกที่แถวรายการห้องพักเพื่อเปิดหน้าต่างแก้ไขข้อมูลห้อง</div>
+            <div class="step-title">เปิดรายการจองของผู้เข้าพักที่ต้องการแก้ไข</div>
+            <div class="step-desc">ในหน้า Guest Booking แถวตารางรายการห้องพักด้านบน ให้ดับเบิลคลิกที่แถวรายการห้องพักของผู้เข้าพักที่ต้องการแก้ไขข้อมูล</div>
           </div>
         </div>
         <div class="figure-wrap">
-          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_02_double_click.png" data-caption="บทที่ 8 · ดับเบิลคลิกรายการห้องพักในตารางด้านบนของหน้า Guest Booking">
-            <img src="images/ch8_02_double_click.png" alt="ดับเบิลคลิกรายการจอง" loading="lazy">
+          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_01_open_booking.png" data-caption="บทที่ 8 · 1. เปิดรายการจองของผู้เข้าพักที่ต้องการแก้ไข">
+            <img src="images/ch8_01_open_booking.png" alt="เปิดรายการจองของผู้เข้าพักที่ต้องการแก้ไข" loading="lazy">
             <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
           </div>
           <div class="figure-caption">
-            <strong>รูปที่ 8.2:</strong> แถบสีแดงล้อมรอบแถวห้องพักที่ต้องดับเบิลคลิก
+            <strong>รูปที่ 8.1:</strong> เปิดรายการจองของผู้เข้าพักที่ต้องการแก้ไข
           </div>
         </div>
       </div>
 
-      <!-- Step 2, 3, 4 Grid -->
+      <!-- Step 2 -->
       <div class="step-card">
         <div class="step-head">
           <div class="step-num">2</div>
           <div>
-            <div class="step-title">ขั้นตอนการเปลี่ยน Room Type และจำนวน Adult/Child</div>
-            <div class="step-desc">ทำตามลำดับในหน้าต่าง Booking ย่อยดังต่อไปนี้:</div>
+            <div class="step-title">เลือกช่อง Room Type เพื่อเปลี่ยนประเภทห้องพัก</div>
+            <div class="step-desc">ในหน้าต่าง Booking ย่อย ให้ดับเบิลคลิกที่ปุ่มจุดไข่ปลาข้างช่อง <span class="sys-field">Rm Type</span> เพื่อเปิดหน้าต่างค้นหาประเภทห้องพัก</div>
           </div>
         </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px;margin-top:14px;">
-          <!-- Sub-step A -->
-          <div style="background:var(--bg-eggshell-light);border:1px solid var(--border-card);border-radius:12px;padding:16px;">
-            <div style="font-weight:700;color:var(--primary-red);margin-bottom:6px;">
-              2.1 ดับเบิลคลิกช่อง Rm Type และช่อง Adult/Child เพื่อเตรียมเปลี่ยน
-            </div>
-            <p style="font-size:0.92rem;color:var(--text-secondary);margin-bottom:10px;">
-              เดิมในหน้าต่างระบุ <code>Rm Type = JSK</code> และ <code>Adult 1 / Child 2</code> ให้ดับเบิลคลิกที่ปุ่มจุดไข่ปลาข้างช่อง Rm Type
-            </p>
-            <div class="figure-interactive lightbox-trigger" data-src="images/ch8_03_change_type.png" data-caption="บทที่ 8 · หน้าต่าง Booking - 189818 แสดงตำแหน่ง Rm Type JSK และ Adult/Child">
-              <img src="images/ch8_03_change_type.png" alt="เปลี่ยน Room Type และจำนวน" loading="lazy">
-              <div class="zoom-indicator">🔍 ซูมภาพ</div>
-            </div>
+        <div class="figure-wrap">
+          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_02_room_type.png" data-caption="บทที่ 8 · 2. เลือกช่อง Room Type เพื่อเปลี่ยนประเภทห้องพัก">
+            <img src="images/ch8_02_room_type.png" alt="เลือกช่อง Room Type เพื่อเปลี่ยนประเภทห้องพัก" loading="lazy">
+            <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
           </div>
-
-          <!-- Sub-step B -->
-          <div style="background:var(--bg-eggshell-light);border:1px solid var(--border-card);border-radius:12px;padding:16px;">
-            <div style="font-weight:700;color:var(--primary-red);margin-bottom:6px;">
-              2.2 เลือก Room Type ที่ต้องการ (เช่น เปลี่ยนจาก JSK เป็น JST)
-            </div>
-            <p style="font-size:0.92rem;color:var(--text-secondary);margin-bottom:10px;">
-              ในหน้าต่าง Search Room Type ให้คลิกเลือกแถว <span class="sys-field">JST (Junior Suite Twin Room)</span> สำหรับผู้เข้าพัก 3 คน แล้วกดปุ่ม <span class="sys-field">OK</span>
-            </p>
-            <div class="figure-interactive lightbox-trigger" data-src="images/ch8_04_select_jst.png" data-caption="บทที่ 8 · เลือก Room type JST (Junior Suite Twin Room) แล้วกด OK">
-              <img src="images/ch8_04_select_jst.png" alt="เลือก Room type ในหน้าค้นหา" loading="lazy">
-              <div class="zoom-indicator">🔍 ซูมภาพ</div>
-            </div>
-          </div>
-
-          <!-- Sub-step C -->
-          <div style="background:var(--bg-eggshell-light);border:1px solid var(--border-card);border-radius:12px;padding:16px;">
-            <div style="font-weight:700;color:var(--primary-red);margin-bottom:6px;">
-              2.3 ปรับจำนวน Adult เป็น 3, Child เป็น 0 จากนั้นกด Done (Save)
-            </div>
-            <p style="font-size:0.92rem;color:var(--text-secondary);margin-bottom:10px;">
-              ตรวจสอบว่า Room Type กลายเป็น <code>JST</code>, Adult เป็น <code>3</code>, Child เป็น <code>0</code> แล้วกดปุ่มเครื่องหมายถูกสีเขียว <span class="sys-field">Done (Save)</span>
-            </p>
-            <div class="figure-interactive lightbox-trigger" data-src="images/ch8_05_done.png" data-caption="บทที่ 8 · ปรับแก้ Adult 3, Child 0 และกดปุ่ม Done (Save) ด้านล่าง">
-              <img src="images/ch8_05_done.png" alt="กดปุ่ม Done เพื่อบันทึก" loading="lazy">
-              <div class="zoom-indicator">🔍 ซูมภาพ</div>
-            </div>
+          <div class="figure-caption">
+            <strong>รูปที่ 8.2:</strong> เลือกช่อง Room Type เพื่อเปลี่ยนประเภทห้องพัก
           </div>
         </div>
       </div>
 
-      <!-- Step 5 & 6 -->
+      <!-- Step 3 -->
       <div class="step-card">
         <div class="step-head">
           <div class="step-num">3</div>
           <div>
-            <div class="step-title">อย่าลืมเปลี่ยน #Pax อาหารเช้า และตรวจสอบก่อนบันทึก</div>
+            <div class="step-title">เลือก Room Type ให้ตรงกับ Booking Confirmation</div>
+            <div class="step-desc">ในหน้าต่าง Search ให้คลิกเลือกประเภทห้องพักที่ต้องการให้ตรงกับใบจอง (เช่น เลือก <span class="sys-field">GDT (Grand Deluxe Triple Room)</span>) แล้วกดปุ่ม <span class="sys-field">OK</span></div>
+          </div>
+        </div>
+        <div class="figure-wrap">
+          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_03_select_room_type.png" data-caption="บทที่ 8 · 3. เลือก Room Type ให้ตรงกับ Booking Confirmation">
+            <img src="images/ch8_03_select_room_type.png" alt="เลือก Room Type ให้ตรงกับ Booking Confirmation" loading="lazy">
+            <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
+          </div>
+          <div class="figure-caption">
+            <strong>รูปที่ 8.3:</strong> เลือก Room Type ให้ตรงกับ Booking Confirmation
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-card">
+        <div class="step-head">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">ปรับจำนวน Adult และ Child ให้ตรงกับข้อมูลการจอง</div>
             <div class="step-desc">
-              1. ในส่วน Production ให้เปลี่ยนช่อง <span class="sys-field">#Pax</span> ให้เป็น <span class="code-yellow">3</span> (จำนวนผู้เข้าพักทานอาหารเช้า)<br>
-              2. ตรวจสอบให้มั่นใจว่า Room Type ตรงกับ Booking Confirmation ทุกครั้งก่อนกดบันทึก
+              1. ปรับจำนวน <span class="sys-field">Adult</span> และ <span class="sys-field">#Child</span> ให้ตรงกับข้อมูลการจองจริง (เช่น ปรับ Adult เป็น 3 และ Child เป็น 0)<br>
+              2. <strong>เมื่อแก้ไขข้อมูลเรียบร้อยแล้ว ให้คลิก Done (Save)</strong> เพื่อบันทึกการเปลี่ยนแปลง
             </div>
           </div>
         </div>
         <div class="figure-wrap">
-          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_06_update_pax.png" data-caption="บทที่ 8 · ตรวจสอบและเปลี่ยนค่า #Pax เป็น 3 ให้สอดคล้องกับจำนวนผู้ใหญ่">
-            <img src="images/ch8_06_update_pax.png" alt="เปลี่ยน #Pax ในหน้า Guest Booking" loading="lazy">
+          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_04_adult_child.png" data-caption="บทที่ 8 · 4. ปรับจำนวน Adult และ Child และคลิก Done (Save)">
+            <img src="images/ch8_04_adult_child.png" alt="ปรับจำนวน Adult และ Child และคลิก Done (Save)" loading="lazy">
             <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
           </div>
           <div class="figure-caption">
-            <strong>รูปที่ 8.3:</strong> กรอบสีแดงไฮไลท์ช่อง #Pax 3 และ Rm Type JST
+            <strong>รูปที่ 8.4:</strong> ปรับจำนวน Adult / Child ให้ตรงกับข้อมูลการจอง และคลิก Done (Save)
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-card">
+        <div class="step-head">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-title">ปรับค่า #Pax ให้ตรงกับจำนวนผู้เข้าพักที่ได้รับสิทธิ์อาหารเช้า</div>
+            <div class="step-desc">
+              1. ในส่วน Production ให้ปรับค่า <span class="sys-field">#Pax</span> ให้ตรงกับจำนวนผู้เข้าพักที่ได้รับสิทธิ์อาหารเช้า (เช่น เปลี่ยนเป็น <span class="code-yellow">3</span>) เพื่อให้ข้อมูลในระบบถูกต้องตามการจอง<br>
+              2. ตรวจสอบ <span class="sys-field">Room Type</span>, <span class="sys-field">Adult/Child</span> และ <span class="sys-field">#Pax</span> ให้ตรงกับ Booking Confirmation ทุกครั้งก่อนบันทึกข้อมูล
+            </div>
+          </div>
+        </div>
+        <div class="figure-wrap">
+          <div class="figure-interactive lightbox-trigger" data-src="images/ch8_05_update_pax.png" data-caption="บทที่ 8 · 5. ปรับค่า #Pax ให้ตรงกับจำนวนผู้เข้าพักที่ได้รับสิทธิ์อาหารเช้า">
+            <img src="images/ch8_05_update_pax.png" alt="ปรับค่า #Pax ให้ตรงกับจำนวนผู้เข้าพักที่ได้รับสิทธิ์อาหารเช้า" loading="lazy">
+            <div class="zoom-indicator">🔍 คลิกเพื่อขยายภาพ</div>
+          </div>
+          <div class="figure-caption">
+            <strong>รูปที่ 8.5:</strong> ปรับค่า #Pax และตรวจสอบความถูกต้องก่อนกดบันทึก
           </div>
         </div>
 
@@ -2286,20 +2361,70 @@
           <h4>✅ เช็กลิสต์ความถูกต้องก่อนกดบันทึกรายการ (Final Checklist)</h4>
           <div class="check-item">
             <div class="check-icon">✓</div>
-            <div>เปลี่ยนจำนวน <strong>Adult / #Child</strong> ให้ตรงกับอายุจริงของแขก (อายุ 12 ปีขึ้นไปนับเป็น Adult)</div>
+            <div>เปิดรายการจองและเลือกแถวห้องพักที่ต้องการแก้ไข</div>
           </div>
           <div class="check-item">
             <div class="check-icon">✓</div>
-            <div>เปลี่ยน <strong>Room Type</strong> ให้รองรับจำนวนผู้เข้าพัก (เช่น เตียง Triple/Twin สำหรับ 3 คน ลงท้ายด้วย T)</div>
+            <div>เลือก <strong>Room Type</strong> ให้ตรงกับประเภทห้องพักที่จองเข้ามา (เช่น GDT - Grand Deluxe Triple Room)</div>
           </div>
           <div class="check-item">
             <div class="check-icon">✓</div>
-            <div>อัปเดตช่อง <strong>#Pax</strong> อาหารเช้าให้เท่ากับจำนวนผู้เข้าพักจริง (เช่น 3 คน)</div>
+            <div>ปรับจำนวน <strong>Adult และ Child</strong> ให้ถูกต้องตามเงื่อนไข (เช่น ผู้ใหญ่ 3 คน เด็ก 0 คน) แล้วกด <strong>Done (Save)</strong></div>
           </div>
           <div class="check-item">
             <div class="check-icon">✓</div>
-            <div>ตรวจสอบ <strong>Daily Rate</strong> และ <strong>Remark</strong> ให้สอดคล้องกันก่อนกดบันทึกข้อมูล</div>
+            <div>ปรับค่า <strong>#Pax</strong> อาหารเช้าให้ตรงกับจำนวนผู้เข้าพักจริง (เช่น 3 คน)</div>
           </div>
+          <div class="check-item">
+            <div class="check-icon">✓</div>
+            <div>ตรวจสอบความถูกต้องทั้งหมดกับ <strong>Booking Confirmation</strong> ทุกครั้งก่อนกดบันทึกข้อมูล</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         บทที่ 9: Child Policy & Additional Charges
+         ========================================== -->
+    <section class="guide-chapter" id="chap9">
+      <div class="chapter-header">
+        <span class="chapter-badge">บทที่ 9</span>
+        <div class="chapter-title-group">
+          <h2>Child Policy & Additional Charges (นโยบายการเข้าพักสำหรับเด็ก)</h2>
+          <p class="sub">เกณฑ์ช่วงอายุ อัตราค่าบริการเสริม และข้อกำหนดการเปลี่ยนสถานะในระบบ Comanche</p>
+        </div>
+      </div>
+
+      <div class="child-policy-stack">
+        <!-- อายุ 0-4 ปี -->
+        <div class="child-policy-card">
+          <div class="policy-age">อายุ 0–4 ปี</div>
+          <div class="policy-headline">เข้าพักโดยไม่มีค่าใช้จ่าย</div>
+          <p class="policy-desc">
+            เด็กอายุ 0–4 ปี สามารถเข้าพักได้โดยไม่มีค่าใช้จ่าย และได้รับอาหารเช้าตามเงื่อนไขที่โรงแรมกำหนด
+          </p>
+        </div>
+
+        <!-- อายุ 5-11 ปี -->
+        <div class="child-policy-card">
+          <div class="policy-age">อายุ 5–11 ปี</div>
+          <div class="policy-headline">อัตราค่าใช้จ่ายสำหรับเด็ก</div>
+          <p class="policy-desc">
+            เด็กอายุ 5–11 ปี มีค่าใช้จ่ายเพิ่มเติมตามช่วงฤดูกาล ดังนี้
+          </p>
+          <ul class="policy-list">
+            <li>High Season : 300 บาท/คน/คืน</li>
+            <li>Low Season : 200 บาท/คน/คืน</li>
+          </ul>
+        </div>
+
+        <!-- อายุ 12 ปีขึ้นไป -->
+        <div class="child-policy-card">
+          <div class="policy-age">อายุ 12 ปีขึ้นไป</div>
+          <div class="policy-headline">คิดอัตราค่าบริการในอัตราผู้ใหญ่ (Adult)</div>
+          <p class="policy-desc">
+            เด็กอายุ 12 ปีขึ้นไป ให้บันทึกเป็น Adult ในระบบ Comanche โดยเปลี่ยนจำนวนผู้เข้าพักจาก Child เป็น Adult ก่อนบันทึกข้อมูลการจอง
+          </p>
         </div>
       </div>
     </section>
@@ -2318,17 +2443,11 @@
   <!-- Right Side Navbar Sidebar -->
   <aside class="sidebar" id="sidebarNav">
     <div class="sidebar-heading">
-      <span>สารบัญคู่มือ (Site Map)</span>
-      <span class="badge-num">8 บท</span>
+      <span>สารบัญคู่มือ (SITE MAP)</span>
+      <span class="badge-num">9 บท</span>
     </div>
 
     <ul class="nav-list" id="navList">
-      <li>
-        <a href="#" class="nav-item">
-          <span class="chap-num" style="background:var(--primary-red);color:#FFF;">🏠</span>
-          <span>หน้าแรก (Home)</span>
-        </a>
-      </li>
       <li>
         <a href="#chap1" class="nav-item">
           <span class="chap-num">1</span>
@@ -2377,12 +2496,14 @@
           <span>บทที่ 8: Room Type & Adult/Child Guide (การเปลี่ยนประเภทห้องพักและจำนวนผู้เข้าพัก)</span>
         </a>
       </li>
+      <li>
+        <a href="#chap9" class="nav-item">
+          <span class="chap-num">9</span>
+          <span>บทที่ 9: Child Policy & Additional Charges (นโยบายการเข้าพักสำหรับเด็ก)</span>
+        </a>
+      </li>
     </ul>
 
-    <div class="sidebar-footer-card">
-      <strong>💡 ทิปสำหรับนักศึกษาฝึกงาน</strong>
-      สามารถคลิกที่รูปภาพหน้าจอทุกรูป เพื่อเปิดดูภาพขนาดใหญ่แบบ Lightbox พร้อมซูมดูช่องข้อมูลอย่างละเอียดได้ครับ
-    </div>
   </aside>
 
 </div>
@@ -2447,24 +2568,21 @@
   }
 
   // ==========================================
-  // 2. Mobile Sidebar Drawer Toggle
+  // 2. Sidebar Toggle (Side-by-side / No Blur Backdrop)
   // ==========================================
   var btnToggleNav = document.getElementById('btnToggleNav');
   var sidebar = document.getElementById('sidebarNav');
-  var backdrop = document.getElementById('sidebarBackdrop');
 
-  function openSidebar() {
-    sidebar.classList.add('open');
-    backdrop.classList.add('active');
-  }
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('active');
+  function toggleSidebar() {
+    if (window.innerWidth > 860) {
+      sidebar.classList.toggle('collapsed');
+    } else {
+      sidebar.classList.toggle('open');
+    }
   }
 
-  if (btnToggleNav && sidebar && backdrop) {
-    btnToggleNav.addEventListener('click', openSidebar);
-    backdrop.addEventListener('click', closeSidebar);
+  if (btnToggleNav && sidebar) {
+    btnToggleNav.addEventListener('click', toggleSidebar);
   }
 
   // Close sidebar on link click (mobile)
@@ -2472,7 +2590,7 @@
   navLinks.forEach(function(link) {
     link.addEventListener('click', function() {
       if (window.innerWidth <= 860) {
-        closeSidebar();
+        sidebar.classList.remove('open');
       }
     });
   });
